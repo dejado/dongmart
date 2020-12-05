@@ -13,11 +13,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="startCameraBtn"
-        android:text="Button" />
+        android:text="카메라" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="getImageBtn"
+        android:text="앨범" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:srcCompat="@tools:sample/avatars" />
+
 </LinearLayout>
