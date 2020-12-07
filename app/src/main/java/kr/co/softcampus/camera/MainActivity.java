@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         try {
-                if (resultCode == 1) {
+                if (resultCode ==1) {
                     Uri uri = data.getData();
                     ContentResolver resolver = getContentResolver();
                     Cursor cursor = resolver.query(uri, null, null, null, null);
@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                     int index = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
                     String source = cursor.getString(index);
 
-                    Bitmap bitmap = (BitmapFactory.decodeFile(contentUri.getPath()));
+                    Bitmap bitmap = (BitmapFactory.decodeFile(source));
                     image1.setImageBitmap(bitmap);
                 }
                 else if(requestCode==2){
