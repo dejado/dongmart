@@ -10,15 +10,23 @@
 
     <Button
         android:id="@+id/button"
-        android:layout_width="match_parent"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/camera_button"
         android:onClick="startCameraBtn"
+        android:textStyle="bold"
         android:text="카메라" />
 
     <Button
         android:id="@+id/button2"
-        android:layout_width="match_parent"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/camera_button"
+        android:textStyle="bold"
         android:onClick="getImageBtn"
         android:text="앨범" />
 

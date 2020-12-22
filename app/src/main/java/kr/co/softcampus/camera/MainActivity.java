@@ -168,6 +168,8 @@ public class MainActivity extends AppCompatActivity {
         }
         return 0.0f;
     }
+
+
     public Bitmap rotateBitmap(Bitmap bitmap, float degree){
         try{
             int width=bitmap.getWidth();
@@ -185,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return null;
     }
+
 }
 
 
