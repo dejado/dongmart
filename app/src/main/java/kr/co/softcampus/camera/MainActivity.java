@@ -12,6 +12,8 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -93,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         contentUri = Uri.fromFile(file);
 
         intent.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
-        startActivityForResult(intent, 2);
+        startActivityForResult(intent, 3000);
     }
 
     @Override
@@ -101,25 +103,87 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         try {
-                if (resultCode ==1) {
-                    Uri uri = data.getData();
-                    ContentResolver resolver = getContentResolver();
-                    Cursor cursor = resolver.query(uri, null, null, null, null);
-                    cursor.moveToNext();
+                if (resultCode ==RESULT_OK) {
+                    switch (requestCode) {
+                        case 1:
+                            Uri uri = data.getData();
+                            ContentResolver resolver = getContentResolver();
+                            Cursor cursor = resolver.query(uri, null, null, null, null);
+                            cursor.moveToNext();
 
-                    int index = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
-                    String source = cursor.getString(index);
+                            int index = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
+                            String source = cursor.getString(index);
 
-                    Bitmap bitmap = (BitmapFactory.decodeFile(source));
-                    image1.setImageBitmap(bitmap);
-                }
-                else if(requestCode==2){
-                    Bitmap bitmap2 = (BitmapFactory.decodeFile(contentUri.getPath()));
-                    image1.setImageBitmap(bitmap2);
+                            Bitmap bitmap = (BitmapFactory.decodeFile(source));
+                            Bitmap bitmap2 = resizeBitmap(1024, bitmap);
+                            float degree = getDegree(source);
+                            Bitmap bitmap3 = rotateBitmap(bitmap2, degree);
+                            image1.setImageBitmap(bitmap3);
+                            break;
+
+                        case 3000:
+                            Bitmap bitmap4 = (BitmapFactory.decodeFile(contentUri.getPath()));
+                            image1.setImageBitmap(bitmap4);
+                            break;
+
+                    }
+
                 }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public Bitmap resizeBitmap(int targetWith, Bitmap source){
+        double ratio=(double)targetWith/(double)source.getWidth();
+        int targetHeight=(int)(source.getHeight()*ratio);
+        Bitmap result=Bitmap.createScaledBitmap(source,targetWith,targetHeight,false);
+        if(result!=source){
+            source.recycle();
+        }
+        return result;
+    }
+
+    public float getDegree(String source){
+        try{
+            ExifInterface exif=new ExifInterface(source);
+            int degree=0;
+            int ori=exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,-1);
+            switch (ori){
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    degree=90;
+                    break;
+
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    degree=180;
+                    break;
+
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    degree=270;
+                    break;
+            }
+            return (float)degree;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return 0.0f;
+    }
+    public Bitmap rotateBitmap(Bitmap bitmap, float degree){
+        try{
+            int width=bitmap.getWidth();
+            int height=bitmap.getHeight();
+
+            Matrix matrix=new Matrix();
+            matrix.postRotate(degree);
+
+            Bitmap bitmap2=Bitmap.createBitmap(bitmap,0,0,width,height,matrix,true);
+            bitmap.recycle();
+
+            return bitmap2;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }
 

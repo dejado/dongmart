@@ -15,8 +15,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <provider
+        </activity>        <provider
             android:authorities="kr.co.softcampus.cameraoriginal.file_provider"
             android:name="androidx.core.content.FileProvider"
             android:exported="false"
